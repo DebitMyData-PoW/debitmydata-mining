@@ -23,8 +23,8 @@
 <link rel="preload" href="/fonts/inter-wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/sora-wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/base.css?v=1">
-<link rel="stylesheet" href="/css/aurora.css?v=1">
-<link rel="stylesheet" href="/css/mining.css?v=2">
+<link rel="stylesheet" href="/css/aurora.css?v=2">
+<link rel="stylesheet" href="/css/mining.css?v=3">
 </head>
 <body class="dmd" id="top">
 <header class="dmd-topbar"><div class="dmd-in">
@@ -93,7 +93,7 @@
 <tbody><tr><td colspan="7" class="mx-muted">Loading the pools…</td></tr></tbody>
 </table>
 <p class="mx-others" id="mx-others" hidden></p>
-<div class="mx-listing"><span>Run a pool that mines DMD? Get it listed here, on the mempool explorer and on DMD Stats.</span><a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener">How to add a pool</a></div>
+<div class="mx-listing"><span>Run a pool that mines DMD? Get it listed here, on the mempool explorer and on DMD Stats.</span><a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener" data-addpool>Add your pool</a></div>
 </section>
 
 <section class="dmd-card" id="charts" aria-labelledby="charts-title">
@@ -215,10 +215,29 @@
 <button type="button" id="dmd-install-later" class="dmd-install-later">Not now</button>
 </div></div></dialog>
 
+<dialog id="mx-addpool" class="dmd-install mx-addpool" aria-labelledby="mx-addpool-title">
+<div class="in">
+<button type="button" class="dmd-install-close" data-addpool-close aria-label="Close">&times;</button>
+<h2 id="mx-addpool-title" tabindex="-1" autofocus>Add your pool</h2>
+<p>Send us your pool's details and we'll list it here, on the mempool explorer and on DMD Stats. It's free.</p>
+<ol class="steps">
+<li><span><b>Name and website</b>, and the country it runs in</span></li>
+<li><span><b>How to spot its blocks</b>: the tag it writes in their coinbase, or the addresses they pay to</span></li>
+<li><span><b>How to connect</b>: stratum addresses and ports, fee, payout scheme and minimum payout</span></li>
+<li><span><b>Its API</b>, if it has one (MiningCore, YIIMP or other) and its address</span></li>
+<li><span><b>Its logo</b>: a square PNG or SVG, 128&nbsp;px or more</span></li></ol>
+<div class="dmd-install-actions">
+<a id="mx-addpool-mail" class="dmd-button dmd-install-go" href="https://github.com/DebitMyData-PoW/mining-pools#readme">Email us</a>
+<button type="button" id="mx-addpool-copy" class="dmd-install-later" hidden>Copy our address</button>
+</div>
+<p class="note">Write to <b id="mx-addpool-address">us</b>. Prefer GitHub? <a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener">Open a pull request</a> on the pool list.</p>
+</div></dialog>
+
 <script src="/vendor/apexcharts-3.54.1.min.js"></script>
 <script src="/js/notify.js?v=1"></script>
 <script src="/js/common.js?v=2"></script>
 <script src="/js/home.js?v=2"></script>
 <script src="/js/install.js?v=1"></script>
+<script src="/js/addpool.js?v=1"></script>
 </body>
 </html>

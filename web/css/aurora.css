@@ -13,14 +13,14 @@
 --input-bg:#fff;--input-line:rgb(19 17 26 / .16);--input-hover:rgb(19 17 26 / .26);--placeholder:#9a96a4;--row-line:rgb(19 17 26 / .06);--row-hover:rgb(224 17 43 / .03);
 --tooltip-head:#fbf7f7;--bar-bg:rgb(19 17 26 / .07);--glow1:rgb(255 90 54 / .22);--glow2:rgb(224 17 43 / .15);--glow3:rgb(255 170 160 / .26);
 --shadow:0 1px 2px rgb(40 10 20 / .04),0 24px 48px -28px rgb(80 10 20 / .28);--soft-shadow:none;--row-shadow:none;--bar-shadow:none;
---pop-shadow:0 40px 90px -40px rgb(80 10 20 / .5)}
+--dialog:#fff;--pop-shadow:0 40px 90px -40px rgb(80 10 20 / .5)}
 html[data-theme="dark"]:root{--red:#ff3348;--red2:#ff7a45;--red-hover:#ff5a6b;--red-deep:#f7f5fa;--red-brand:#ff5a6b;--red-text:#ff5a6b;--pink:rgb(255 51 72 / .13);
 --pink-line:rgb(255 51 72 / .35);--pink-hover:rgb(255 51 72 / .18);--grey:rgb(255 255 255 / .06);--line:rgb(255 255 255 / .085);--text:#f7f5fa;--muted:#8f8a9b;
 --body:#bdb8c8;--green:#4ade80;--gold:#f0b429;--up:#4ade80;--down:#ff5a6b;--page-bg:#0b0a0f;--card:rgb(255 255 255 / .045);--topbar:rgb(21 19 27 / .72);
 --stat-hover-line:rgb(255 255 255 / .18);--input-bg:#15131b;--input-line:rgb(255 255 255 / .16);--input-hover:rgb(255 255 255 / .26);--placeholder:#6f6a7c;
 --row-line:rgb(255 255 255 / .06);--row-hover:rgb(255 51 72 / .05);--tooltip-head:#1b1822;--bar-bg:rgb(255 255 255 / .08);
 --glow1:rgb(255 51 72 / .24);--glow2:rgb(160 40 255 / .13);--glow3:rgb(255 122 69 / .12);
---shadow:0 1px 2px rgb(0 0 0 / .3),0 24px 48px -28px rgb(0 0 0 / .8);--pop-shadow:0 40px 90px -40px #000}
+--shadow:0 1px 2px rgb(0 0 0 / .3),0 24px 48px -28px rgb(0 0 0 / .8);--dialog:#15131b;--pop-shadow:0 40px 90px -40px #000}
 html:root{background:var(--page-bg)}
 body.dmd{position:relative;font:16px/1.65 var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
 body.dmd::before{content:"";position:absolute;inset:-260px 0 auto;height:1150px;z-index:0;pointer-events:none;
@@ -115,3 +115,8 @@ background:linear-gradient(var(--page-bg) 55%,transparent)}
 .dmd .dmd-opt{border-radius:14px}
 .dmd .dmd-num,.dmd .dmd-dir{border-radius:12px}
 @media (max-width:600px){.dmd .dmd-stat{padding:14px 12px}.dmd .dmd-stat b{font-size:1.18rem;white-space:nowrap}}
+
+/* Pop-up windows ("Get the app", "Add your pool"): solid, over a dimmed and blurred page.
+   The cards' see-through background would let the page show through them. */
+.dmd dialog.dmd-install{background:var(--dialog);border:1px solid var(--line)}
+.dmd dialog.dmd-install::backdrop{background:rgb(11 10 15 / .55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}

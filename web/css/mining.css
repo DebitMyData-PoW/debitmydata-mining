@@ -83,6 +83,15 @@ border:1px dashed var(--input-line);border-radius:99px;padding:9px 16px;cursor:p
 background:var(--grey);font-size:.92rem;color:var(--body)}
 .dmd .mx-listing a{font-weight:600}
 
+/* "Add your pool": what to send, and how */
+.dmd .mx-addpool .in{padding-top:30px}
+.dmd .mx-addpool .steps li{align-items:flex-start;font-size:.95rem;line-height:1.4}
+.dmd .mx-addpool .steps li::before{margin-top:-2px}
+.dmd .mx-addpool .steps b{color:var(--text)}
+.dmd .mx-addpool p.note{margin:16px 0 0;font-size:.92rem}
+.dmd .mx-addpool p.note b{color:var(--text);font-weight:600;overflow-wrap:anywhere}
+.dmd .mx-addpool .dmd-install-go{text-decoration:none}
+
 /* Charts */
 .dmd .mx-chart-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 6px}
 .dmd .mx-chart-bar .dmd-ranges{margin-left:auto}
