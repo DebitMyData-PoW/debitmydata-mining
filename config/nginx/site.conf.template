@@ -1,0 +1,118 @@
+# DMD Mining, behind Cloudflare (proxied), with Cloudflare's origin certificate. Written by
+# install.sh from config/nginx/site.conf.template.
+#   @HOST@   the site (mining.debitmydata.io): web/, and the files the service writes
+
+# /push (the notifications' settings): 30 requests a minute per visitor, a burst of 20
+limit_req_zone $binary_remote_addr zone=dmdm_push:2m rate=30r/m;
+
+# Any other name, or the server's IP: nothing.
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    return 444;
+}
+server {
+    listen 443 ssl http2 default_server;
+    listen [::]:443 ssl http2 default_server;
+    ssl_reject_handshake on;
+}
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name @HOST@;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name @HOST@;
+    ssl_certificate @CERT@;
+    ssl_certificate_key @KEY@;
+    root /var/www/dmd-mining;
+    index index.html;
+    charset utf-8;
+    gzip on;
+    gzip_types text/css application/javascript application/json image/svg+xml application/manifest+json;
+    include snippets/dmd-mining-headers.conf;
+    include snippets/dmd-mining-csp.conf;
+
+    # The API's page, and the files the service writes every 20 seconds. Public: any site may
+    # read them.
+    location = /api {
+        return 301 /api/;
+    }
+    location = /api/ {
+        add_header Cache-Control "no-cache" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+        try_files /api.html =404;
+    }
+    location /api/ {
+        alias /var/lib/dmd-mining/public/api/;
+        types { application/json json; }
+        default_type application/json;
+        add_header Cache-Control "public, max-age=15" always;
+        add_header Access-Control-Allow-Origin "*" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+    }
+    # The pools' logos, as the service keeps them from GitHub: pictures only.
+    location /logos/ {
+        alias /var/lib/dmd-mining/public/logos/;
+        types { image/svg+xml svg; }
+        default_type application/octet-stream;
+        add_header Cache-Control "public, max-age=3600" always;
+        add_header Content-Security-Policy "default-src 'none'; img-src data:; style-src 'unsafe-inline'; sandbox" always;
+        add_header X-Content-Type-Options "nosniff" always;
+    }
+    # A pool's page: one page for all of them, which reads /api/pools/<slug>.json
+    location ~ "^/pool/[a-z0-9]{1,40}/?$" {
+        add_header Cache-Control "no-cache" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+        try_files /pool.html =404;
+    }
+    # The notifications: the service's small API on this server only
+    location = /push {
+        limit_req zone=dmdm_push burst=20 nodelay;
+        limit_req_status 429;
+        client_max_body_size 16k;
+        proxy_pass http://127.0.0.1:8481;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_read_timeout 20s;
+        add_header Cache-Control "no-store" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+    }
+    location = /sw.js {
+        add_header Cache-Control "no-cache" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+    }
+    location = /manifest.json {
+        types { }
+        default_type application/manifest+json;
+        add_header Cache-Control "public, max-age=3600" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+    }
+    # For the Android app from Google Play, once it exists (see the README)
+    location = /.well-known/assetlinks.json {
+        types { }
+        default_type application/json;
+    }
+    location ~* \.(?:png|ico|woff2|js|css)$ {
+        add_header Cache-Control "public, max-age=604800" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+    }
+    location / {
+        add_header Cache-Control "no-cache" always;
+        include snippets/dmd-mining-headers.conf;
+        include snippets/dmd-mining-csp.conf;
+        try_files $uri $uri/ =404;
+    }
+}

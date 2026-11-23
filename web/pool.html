@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="/js/early.js?v=1"></script>
+<title>A pool · DMD Mining</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="DMD Mining">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="/images/app/apple-touch-icon.png?v=1">
+<link rel="icon" type="image/png" sizes="192x192" href="/images/app/icon-192.png?v=1">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<meta name="description" content="A pool mining DMD, the DebitMyData coin: its hashrate, the blocks it finds, its fees and how to connect.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DMD Mining: every DebitMyData mining pool">
+<meta property="og:description" content="The pools mining DMD, live: hashrate, blocks found, fees, stratum addresses, notifications.">
+<meta property="og:image" content="https://mining.debitmydata.io/images/app/icon-512.png?v=1">
+
+<link rel="preload" href="/fonts/inter-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/sora-wght.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/css/base.css?v=1">
+<link rel="stylesheet" href="/css/aurora.css?v=1">
+<link rel="stylesheet" href="/css/mining.css?v=1">
+</head>
+<body class="dmd" id="top">
+<header class="dmd-topbar"><div class="dmd-in">
+<a class="dmd-brand" href="/"><img src="/images/dmd-mining-25.png" srcset="/images/dmd-mining-25.png 1x, /images/dmd-mining-50.png 2x, /images/dmd-mining-75.png 3x" width="25" height="25" alt="">DebitMyData <span class="dmd-tag">Mining</span></a>
+<input type="checkbox" id="dmd-menu-toggle" class="dmd-menu-toggle" aria-label="Menu" aria-controls="dmd-menu">
+<label for="dmd-menu-toggle" class="dmd-menu-button" aria-hidden="true"><span></span></label>
+<button type="button" id="dmd-theme-toggle" class="dmd-theme-toggle" aria-label="Switch between the light and dark themes"><svg class="dmd-moon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.5 14.2A8.5 8.5 0 1 1 9.8 3.5a6.8 6.8 0 0 0 10.7 10.7z"/></svg><svg class="dmd-sun" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg></button>
+<div class="dmd-bellbox" id="dmd-bellbox" hidden>
+<button type="button" class="dmd-bell" id="dmd-bell" data-unread="0" aria-haspopup="true" aria-expanded="false" aria-controls="dmd-bell-panel" title="Notifications" aria-label="Notifications"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dmd-bell-dot" aria-hidden="true"></span></button>
+<div class="dmd-bell-panel" id="dmd-bell-panel" role="region" aria-label="Notifications" hidden>
+<div class="dmd-bell-head"><b>Notifications</b><button type="button" class="dmd-bell-all" hidden>Mark all as seen</button></div>
+<ul class="dmd-bell-list"></ul><p class="dmd-bell-empty">Loading…</p>
+<div class="dmd-bell-actions" hidden><button type="button" class="dmd-button dmd-bell-on">Turn on notifications</button></div>
+<div class="dmd-bell-foot"><a class="dmd-bell-settings" href="/#notifications">Notification settings</a>
+<span class="dmd-bell-tools"><button type="button" class="dmd-bell-test" hidden>Send a test notice</button><button type="button" class="dmd-bell-off" hidden>Turn off</button></span></div>
+</div></div>
+<nav id="dmd-menu" class="dmd-nav" aria-label="DMD Mining">
+<a href="/" class="on">Pools</a>
+<a href="/#blocks">Blocks</a>
+<a href="/api/">API</a>
+<a href="https://stats.debitmydata.io/" target="_blank" rel="noopener">Stats <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+<a href="https://mempool.debitmydata.io/" target="_blank" rel="noopener">Explorer <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+<a class="dmd-cta" href="https://debitmydata.io/#mining" target="_blank" rel="noopener">How to mine <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17L17 7M9 7h8v8"/></svg></a>
+</nav></div></header>
+
+<main><div class="content-inner">
+<a class="mx-back" href="/"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6"/></svg>All pools</a>
+<div id="mx-page">
+<section class="mx-head" id="mx-head" aria-live="polite"><span class="mx-logo"></span><div><h1>Loading…</h1></div></section>
+
+<ul class="dmd-stats" aria-label="The pool now">
+<li class="dmd-stat dmd-main"><span class="dmd-label">Hashrate</span><b id="p-rate">–</b><span class="dmd-sub" id="p-rate-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Blocks (24h)</span><b id="p-blocks">–</b><span class="dmd-sub" id="p-blocks-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Last block</span><b id="p-last">–</b><span class="dmd-sub" id="p-last-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Luck (24h)</span><b id="p-luck">–</b><span class="dmd-sub" id="p-luck-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Miners</span><b id="p-miners">–</b><span class="dmd-sub" id="p-miners-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Fee</span><b id="p-fee">–</b><span class="dmd-sub" id="p-fee-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Time to a block</span><b id="p-ttf">–</b><span class="dmd-sub" id="p-ttf-sub">&nbsp;</span></li>
+<li class="dmd-stat"><span class="dmd-label">Blocks found</span><b id="p-total">–</b><span class="dmd-sub" id="p-total-sub">&nbsp;</span></li>
+</ul>
+
+<div class="dmd-two">
+<section class="dmd-card" id="connect" aria-labelledby="connect-title">
+<div class="dmd-card-head"><h2 id="connect-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 7H6a5 5 0 0 0 0 10h3M15 7h3a5 5 0 0 1 0 10h-3M8 12h8"/></svg>How to connect</h2></div>
+<div id="mx-connect"><p class="mx-muted">Loading…</p></div>
+</section>
+<section class="dmd-card" id="details" aria-labelledby="details-title">
+<div class="dmd-card-head"><h2 id="details-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>About this pool</h2></div>
+<dl class="dmd-kv" id="mx-details"></dl>
+</section>
+</div>
+
+<section class="dmd-card" id="charts" aria-labelledby="charts-title">
+<div class="dmd-card-head">
+<h2 id="charts-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>Hashrate and blocks</h2>
+</div>
+<div class="mx-chart-bar">
+<ul class="mx-legend" id="mx-legend"></ul>
+<div class="dmd-tabs dmd-ranges" role="group" aria-label="Period" id="mx-ranges">
+<button type="button" class="dmd-tab" data-range="24h" aria-pressed="true">24H</button>
+<button type="button" class="dmd-tab" data-range="7d" aria-pressed="false">7D</button>
+<button type="button" class="dmd-tab" data-range="30d" aria-pressed="false">30D</button>
+<button type="button" class="dmd-tab" data-range="1y" aria-pressed="false">1Y</button>
+</div>
+</div>
+<div class="mx-chart" id="mx-chart" role="img" aria-label="The pool's hashrate"></div>
+<div class="mx-chart small" id="mx-chart-blocks" role="img" aria-label="The blocks the pool found"></div>
+<p class="mx-note" id="mx-chart-note"></p>
+</section>
+
+<section class="dmd-card" id="found" aria-labelledby="found-title">
+<div class="dmd-card-head"><h2 id="found-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>Blocks found</h2>
+<span class="mx-muted mx-num" id="mx-found-count"></span></div>
+<div class="dmd-table-wrap"><table class="dmd-table mx-found" id="mx-found"><thead></thead><tbody></tbody></table></div>
+<div class="mx-more"><button type="button" id="mx-found-more" hidden>Show more</button></div>
+<p class="mx-note" id="mx-orphaned" hidden></p>
+</section>
+</div>
+</div></main>
+
+<footer class="dmd-footer" id="dmd-footer"><div class="dmd-in"><div class="dmd-cols">
+<div class="dmd-col"><p class="dmd-head">Mining</p><a href="/">Pools</a><a href="/#notifications">Notifications</a><a class="dmd-pill-link dmd-api-link" href="/api/"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 4l-3 16"/></svg>API</a><a class="dmd-get-app" href="#get-the-app"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg>Get the app</a></div>
+<div class="dmd-col"><p class="dmd-head">Mine DMD</p><a href="https://pool.debitmydata.io/" target="_blank" rel="noopener">The DebitMyData pool</a><a href="https://debitmydata.io/#mining" target="_blank" rel="noopener">How to mine</a><a href="https://debitmydata.io/#wallets" target="_blank" rel="noopener">Get a DMD wallet</a><a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener">Add a pool</a></div>
+<div class="dmd-col"><p class="dmd-head">Explorers</p><a href="https://mempool.debitmydata.io/" target="_blank" rel="noopener">Mempool explorer</a><a href="https://chain.debitmydata.io/" target="_blank" rel="noopener">Lite explorer</a><a href="https://explorer.debitmydata.io/" target="_blank" rel="noopener">Rich list &amp; API</a></div>
+<div class="dmd-col"><p class="dmd-head">Figures</p><a href="https://stats.debitmydata.io/" target="_blank" rel="noopener">DMD Stats</a><a href="https://analytics.debitmydata.io/" target="_blank" rel="noopener">Analytics</a></div>
+<div class="dmd-col"><p class="dmd-head">DebitMyData</p><a href="https://debitmydata.io/" target="_blank" rel="noopener">debitmydata.io</a><a href="https://debitmydata.com/" target="_blank" rel="noopener">debitmydata.com</a><a href="https://id.debitmydata.io/" target="_blank" rel="noopener">Get a DID-LLM</a></div>
+<div class="dmd-col"><p class="dmd-head">Community</p><a href="https://discord.gg/PSK436rP4Y" target="_blank" rel="noopener">Discord</a><a href="https://x.com/debitmydataPOW" target="_blank" rel="noopener">X (Twitter)</a><a href="https://github.com/DebitMyData-PoW" target="_blank" rel="noopener">GitHub</a><a href="mailto:info@debitmydata.com">info@debitmydata.com</a></div>
+</div>
+<p class="dmd-legal">© <span id="dmd-year">2026</span> DebitMyData · DMD is the DebitMyData coin, the native coin of the DebitMyData Proof-of-Work chain · The pools are run by their own operators: DebitMyData runs only the DebitMyData pool, and answers for no other.</p>
+</div></footer>
+<a class="dmd-to-top" href="#top" aria-label="Back to top" title="Back to top"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 5l-7 7m7-7l7 7M12 5v14"/></svg></a>
+
+<dialog id="dmd-install" class="dmd-install" aria-labelledby="dmd-install-title">
+<div class="in">
+<button type="button" id="dmd-install-close" class="dmd-install-close" aria-label="Close">&times;</button>
+<img src="/images/app/icon-512.png?v=1" alt="" width="112" height="112" loading="lazy" decoding="async">
+<h2 id="dmd-install-title" tabindex="-1" autofocus>Get the DMD Mining app</h2>
+<p id="dmd-install-how"></p>
+<ol id="dmd-install-iphone" class="steps" hidden>
+<li><span>Tap <b>Share</b></span><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M12 3v12M8 7l4-4 4 4M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></li>
+<li><span>Choose <b>Add to Home Screen</b></span><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></li></ol>
+<ol id="dmd-install-android" class="steps" hidden>
+<li><span>Open the browser's menu <b>&#8942;</b></span></li>
+<li><span>Tap <b>Install app</b> or <b>Add to Home screen</b></span></li></ol>
+<p id="dmd-install-note" class="note" hidden>Already added it? Open it from your home screen.</p>
+<div class="dmd-install-actions">
+<button type="button" id="dmd-install-go" class="dmd-button dmd-install-go" hidden>Install the app</button>
+<button type="button" id="dmd-install-later" class="dmd-install-later">Not now</button>
+</div></div></dialog>
+
+<script src="/vendor/apexcharts-3.54.1.min.js"></script>
+<script src="/js/notify.js?v=1"></script>
+<script src="/js/common.js?v=1"></script>
+<script src="/js/pool.js?v=1"></script>
+<script src="/js/install.js?v=1"></script>
+</body>
+</html>

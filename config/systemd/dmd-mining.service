@@ -1,0 +1,29 @@
+[Unit]
+Description=DMD Mining: the pools' APIs, the chain from DMD Stats, the notifications and the site's files
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=dmdmining
+Group=dmdmining
+EnvironmentFile=/etc/dmd-mining/mining.env
+ExecStart=/opt/debitmydata-mining/.venv/bin/dmd-mining run
+Restart=always
+RestartSec=10
+# (A small server: the service stays well under this.)
+MemoryMax=400M
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/dmd-mining
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+LockPersonality=yes
+
+[Install]
+WantedBy=multi-user.target
