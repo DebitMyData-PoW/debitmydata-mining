@@ -445,6 +445,58 @@ def _buckets(start: int, end: int, step: int) -> list[int]:
     return list(range(first, end - end % step + 1, step)) or [end - end % step]
 
 
+def _hashrate_from_blocks(
+    conn: sqlite3.Connection,
+    pools: dict[str, Pool],
+    times: list[int],
+    step: int,
+    window: int,
+    now: int,
+) -> list[dict[str, Any]]:
+    """Each pool's hashrate from the blocks it found, as the mempool explorer works it out: the
+    work of its blocks (difficulty × 2^32 each) over the window, divided by the window. It covers
+    every block since block 1, the pools without an API too, and together they make the
+    network's. The biggest pools each, the others (and the miners not in the list) together."""
+    found: dict[str, tuple[list[int], list[float]]] = {}
+    names: dict[str, str] = {}
+    for r in conn.execute(
+        "SELECT coalesce(slug, '~' || miner) AS who, slug, miner, time, difficulty FROM blocks "
+        "WHERE time > ? AND time <= ? ORDER BY time",
+        (times[0] - window, now),
+    ):
+        when, works = found.setdefault(r["who"], ([], []))
+        when.append(r["time"])
+        works.append(r["difficulty"] * WORK)
+        names[r["who"]] = _name(r["slug"], r["miner"], pools)
+    in_range = {k: sum(w for t, w in zip(*found[k], strict=True) if t > times[0]) for k in found}
+    ranked = sorted((k for k in found if in_range[k] > 0), key=lambda k: -in_range[k])
+    shown = [k for k in ranked if not k.startswith("~")][:TOP_SERIES]
+    rest = [k for k in found if k not in shown]
+
+    def series(keys: list[str]) -> list[float | None]:
+        prefix: list[tuple[list[int], list[float]]] = []
+        for k in keys:
+            when, works = found[k]
+            sums = [0.0]
+            for w in works:
+                sums.append(sums[-1] + w)
+            prefix.append((when, sums))
+        out: list[float | None] = []
+        for t in times:
+            end = min(t + step, now)
+            total = 0.0
+            for when, sums in prefix:
+                a, b = bisect.bisect_right(when, end - window), bisect.bisect_right(when, end)
+                total += sums[b] - sums[a]
+            out.append(_round(total / window))
+        return out
+
+    out = [{"key": k, "slug": k, "name": names[k], "values": series([k])} for k in shown]
+    if rest and any(in_range.get(k) for k in rest):
+        out.append({"key": "others", "slug": None, "name": "Other miners", "values": series(rest)})
+    return out
+
+
 def chart(
     conn: sqlite3.Connection,
     c: Chain,
@@ -498,6 +550,7 @@ def chart(
             if series[s]
         ],
         "window": window,
+        "from_blocks": _hashrate_from_blocks(conn, pools, times, step, max(window, step), now),
     }
     # The blocks each found, a bar per step.
     btimes = _buckets(start, now, block_step)

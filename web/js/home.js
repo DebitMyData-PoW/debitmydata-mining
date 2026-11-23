@@ -4,7 +4,7 @@
 // every 30 seconds while the page is in view.
 (function () {
   "use strict";
-  var DM = window.DM, $ = DM.$, el = DM.el;
+  var DM = window.DM, $ = DM.$, el = DM.el, root = document.documentElement;
   var state = { summary: null, blocks: [], dist: null, charts: {}, filter: "all", sort: "hashrate",
     metric: "hashrate", range: "24h", shareRange: "24h", shown: 12, showIdle: false };
   try {
@@ -212,7 +212,38 @@
     if (!data || !window.ApexCharts) return;
     var c = DM.chartTheme(), series = [], colors = [], dashes = [], widths = [], items = [];
     var options;
+    var every = function (step) {
+      return step < 3600 ? step / 60 + " minutes" : step === 3600 ? "hour" : step === 86400 ? "day" : step / 3600 + " hours";
+    };
     if (state.metric === "hashrate") {
+      // Each pool's hashrate from the blocks it found (all of history, every pool): stacked, they
+      // make the network's.
+      var hb = data.hashrate, ht = hb.times.map(function (t) { return t * 1000; });
+      (hb.from_blocks || []).forEach(function (p) {
+        series.push({ name: p.name, data: ht.map(function (t, i) { return [t, p.values[i]]; }) });
+        colors.push(DM.colorHex(p.key === "others" ? null : p.slug));
+        items.push({ name: p.name, value: DM.hashrate(p.values[p.values.length - 1]), cls: p.key === "others" ? "cx" : DM.colorClass(p.slug) });
+      });
+      items.push({ name: "Together, the network", value: DM.hashrate(hb.network[hb.network.length - 1]), cls: "plain" });
+      options = {
+        chart: { type: "area", stacked: true, height: 330, toolbar: { show: false }, zoom: { enabled: false }, animations: { enabled: false },
+          fontFamily: "Inter, system-ui, sans-serif", foreColor: c.fore, background: "transparent" },
+        series: series, colors: colors,
+        stroke: { width: 1.5, curve: "straight" },
+        fill: { type: "solid", opacity: root.getAttribute("data-theme") === "dark" ? 0.42 : 0.5 },
+        legend: { show: false },
+        grid: { borderColor: c.grid, strokeDashArray: 3, padding: { left: 6, right: 10 } },
+        xaxis: { type: "datetime", labels: { datetimeUTC: false, format: axisFormat(state.range) }, axisBorder: { show: false }, axisTicks: { show: false }, tooltip: { enabled: false } },
+        yaxis: { min: 0, forceNiceScale: true, labels: { formatter: function (v) { return DM.hashrate(v); } } },
+        tooltip: { theme: c.tooltip, shared: true, intersect: false, x: { format: state.range === "24h" ? "MMM d, HH:mm" : "MMM d, yyyy HH:mm" },
+          y: { formatter: function (v) { return v === null || v === undefined ? "–" : DM.hashrate(v); } } },
+        markers: { size: 0, hover: { size: 3 } },
+        dataLabels: { enabled: false }
+      };
+      $("mx-chart-note").textContent = "Each pool's hashrate from the blocks it found, as the mempool explorer works it out: the work of its blocks over " +
+        DM.duration(hb.window) + ", every " + every(hb.step) + ". It covers every block since block 1 and every pool, the ones without an API too; " +
+        "together they make the network's. What each pool's own API says: \u201cFrom their APIs\u201d.";
+    } else if (state.metric === "apis") {
       var h = data.hashrate;
       var times = h.times.map(function (t) { return t * 1000; });
       h.pools.forEach(function (p) {
@@ -238,9 +269,9 @@
         markers: { size: 0, hover: { size: 4 } },
         dataLabels: { enabled: false }
       };
-      $("mx-chart-note").textContent = "Each pool's hashrate as its API says it (pools without an API aren't drawn), every " +
-        (h.step < 3600 ? h.step / 60 + " minutes" : h.step === 3600 ? "hour" : h.step === 86400 ? "day" : h.step / 3600 + " hours") +
-        "; the network's, dashed, from the work of the blocks found. The pools' figures start when this site started following them.";
+      $("mx-chart-note").textContent = "Each pool's hashrate as its own API says it (pools without an API aren't drawn), every " + every(h.step) +
+        "; the network's, dashed, from the work of the blocks found. These figures start when this site started following the pools: " +
+        "for the history, see \u201cHashrate by pool\u201d.";
     } else {
       var b = data.blocks;
       var bt = b.times.map(function (t) { return t * 1000; });

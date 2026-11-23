@@ -91,6 +91,8 @@ background:var(--grey);font-size:.92rem;color:var(--body)}
 .dmd .mx-legend li::before{content:"";width:12px;height:12px;border-radius:4px;background:var(--c,var(--cx));flex:none}
 .dmd .mx-legend li.line::before{height:3px;border-radius:2px;background:var(--text);opacity:.55}
 .dmd .mx-legend li.dash::before{height:0;border-top:2px dashed var(--muted);border-radius:0;background:none}
+.dmd .mx-legend li.plain::before{display:none}
+.dmd .mx-legend li.plain{color:var(--muted)}
 .dmd .mx-legend b{font-weight:600;color:var(--text);font-variant-numeric:tabular-nums}
 .dmd .mx-chart{min-height:330px;margin:0 -8px}
 .dmd .mx-chart.small{min-height:220px}

@@ -264,6 +264,16 @@ def test_the_site_files(conn: sqlite3.Connection, settings: Settings, world: Wor
     cyber = next(s for s in day["hashrate"]["pools"] if s["slug"] == "cyberpool")
     assert cyber["values"][-2] == 9.06e12 and cyber["values"][0] is None
     assert day["blocks"]["series"][-1]["name"] == "Other miners"
+    # each pool's hashrate from its blocks: together, the network's
+    found = day["hashrate"]["from_blocks"]
+    assert [f["key"] for f in found][:2] == ["official", "cyberpool"] and found[-1][
+        "key"
+    ] == "others"
+    for k in (5, 100, 250):
+        together = sum(f["values"][k] for f in found)
+        assert together == pytest.approx(day["hashrate"]["network"][k], rel=0.001)
+    everything = json.loads((api_dir / "chart-all.json").read_text())["hashrate"]["from_blocks"]
+    assert sum(everything[0]["values"]) > 0
     assert 540 <= sum(sum(s["values"]) for s in day["blocks"]["series"]) <= 577
     for name in ("7d", "30d", "1y", "all"):
         assert json.loads((api_dir / f"chart-{name}.json").read_text())["range"] == name

@@ -17,8 +17,9 @@ Every pool mining DMD (the DebitMyData coin), live:
   difficulty, the username and password, copied in one tap), its hashrate and blocks over 24
   hours, 7 days, 30 days and a year, the blocks it found with their status and effort, its
   addresses, how often its API answered, whether its node is behind the chain.
-- **The charts over time**: each pool's hashrate against the network's, and the blocks each found,
-  from 24 hours to everything since block 1.
+- **The charts over time**: each pool's hashrate from the blocks it found (as the mempool explorer
+  works it out: every block since block 1, every pool; together they make the network's), or as
+  its own API says it, and the blocks each found, from 24 hours to everything.
 - **Who finds the blocks**, and how concentrated mining is: how many miners together find half of
   them (a miner with more than half could rewrite recent blocks).
 - **The latest blocks**, who found each and how long it took.

@@ -54,7 +54,8 @@
     if (s < 3600) { var m = Math.floor(s / 60), r = s % 60; return m + " min" + (r && m < 10 ? " " + r + " s" : ""); }
     if (s < 86400) { var h = Math.floor(s / 3600), mm = Math.round((s % 3600) / 60); return h + " h" + (mm ? " " + mm + " min" : ""); }
     var d = s / 86400;
-    return (d >= 10 ? Math.round(d) : Math.round(d * 10) / 10) + " days";
+    d = d >= 10 ? Math.round(d) : Math.round(d * 10) / 10;
+    return d + (d === 1 ? " day" : " days");
   };
   DM.ago = function (t) {
     if (none(t)) return "–";
