@@ -24,7 +24,7 @@
 <link rel="preload" href="/fonts/sora-wght.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/base.css?v=1">
 <link rel="stylesheet" href="/css/aurora.css?v=2">
-<link rel="stylesheet" href="/css/mining.css?v=3">
+<link rel="stylesheet" href="/css/mining.css?v=4">
 </head>
 <body class="dmd" id="top">
 <header class="dmd-topbar"><div class="dmd-in">
@@ -230,7 +230,16 @@
 <a id="mx-addpool-mail" class="dmd-button dmd-install-go" href="https://github.com/DebitMyData-PoW/mining-pools#readme">Email us</a>
 <button type="button" id="mx-addpool-copy" class="dmd-install-later" hidden>Copy our address</button>
 </div>
-<p class="note">Write to <b id="mx-addpool-address">us</b>. Prefer GitHub? <a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener">Open a pull request</a> on the pool list.</p>
+<p class="note">Write to <b id="mx-addpool-address">us</b>.</p>
+<details class="mx-addpool-github">
+<summary>Prefer GitHub? Add it yourself</summary>
+<ol>
+<li><a href="https://github.com/DebitMyData-PoW/mining-pools/edit/master/pools-v2.json" target="_blank" rel="noopener"><b>Edit pools-v2.json</b></a>: copy the last pool, give it the next <code>id</code>, its name, coinbase tags, payout addresses, website and country. This one file is enough to be listed.</li>
+<li>Optional: <a href="https://github.com/DebitMyData-PoW/mining-pools/edit/master/pools-info.json" target="_blank" rel="noopener"><b>edit pools-info.json</b></a> with the same <code>id</code>, for your stratum, fees and API.</li>
+<li>Optional: <a href="https://github.com/DebitMyData-PoW/mining-pool-logos/upload/master" target="_blank" rel="noopener"><b>upload your logo</b></a> as an SVG named with your pool name's lowercase letters and digits (<code>Coin-Miners</code>: <code>coinminers.svg</code>).</li>
+</ol>
+<p>GitHub makes your own copy and turns your change into a pull request. <a href="https://github.com/DebitMyData-PoW/mining-pools#readme" target="_blank" rel="noopener">How the files work</a></p>
+</details>
 </div></dialog>
 
 <script src="/vendor/apexcharts-3.54.1.min.js"></script>

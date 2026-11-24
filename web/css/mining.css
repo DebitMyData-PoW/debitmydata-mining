@@ -91,6 +91,13 @@ background:var(--grey);font-size:.92rem;color:var(--body)}
 .dmd .mx-addpool p.note{margin:16px 0 0;font-size:.92rem}
 .dmd .mx-addpool p.note b{color:var(--text);font-weight:600;overflow-wrap:anywhere}
 .dmd .mx-addpool .dmd-install-go{text-decoration:none}
+.dmd .mx-addpool-github{margin:14px 0 0;padding:12px 0 0;border-top:1px solid var(--line);text-align:left;font-size:.9rem;color:var(--body)}
+.dmd .mx-addpool-github summary{cursor:pointer;text-align:center;font-weight:600;color:var(--text);list-style-position:inside}
+.dmd .mx-addpool-github ol{margin:12px 0 0;padding:0 0 0 20px;display:grid;gap:8px;line-height:1.45}
+.dmd .mx-addpool-github a{color:var(--red-text)}
+.dmd .mx-addpool-github a b{font-weight:600}
+.dmd .mx-addpool-github code{font-size:.85em;padding:1px 4px;border-radius:5px;background:var(--grey);color:var(--text)}
+.dmd .mx-addpool .mx-addpool-github p{margin:10px 0 0;font-size:.88rem;line-height:1.45;color:var(--muted)}
 
 /* Charts */
 .dmd .mx-chart-bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:0 0 6px}

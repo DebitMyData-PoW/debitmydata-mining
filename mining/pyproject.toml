@@ -1,6 +1,6 @@
 [project]
 name = "dmd-mining"
-version = "1.0.2"
+version = "1.0.3"
 description = "DMD Mining (mining.debitmydata.io): every pool mining DMD, the DebitMyData coin, from their APIs and the chain, with notifications and the site's files."
 requires-python = ">=3.12"
 license = "MIT"
