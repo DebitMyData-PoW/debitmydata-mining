@@ -71,18 +71,19 @@ reads the list now).
 ## What you need
 
 - **A small Ubuntu 24.04 server**: 1 vCPU and 1 GB of memory are enough (the installer adds a
-  1 GB swap file), 25 GB of disk (Vultr: Cloud Compute, Regular Performance, the smallest one),
-  in another city than the pool. SSH with your key.
-- **DMD Stats 1.1.12 or later** on the stats server: it publishes `blocks.json`, which this site
-  follows. Update it first.
-- **A name in Cloudflare**: `mining.debitmydata.io`, an A record to the server's IP, **proxied**
-  (orange cloud).
-- **A Cloudflare origin certificate** for `*.debitmydata.io` and `debitmydata.io`: the one you
-  already use on the other servers works.
+  1 GB swap file), 25 GB of disk, at any provider. Best in another data centre than the pools it
+  watches. SSH with a key.
+- **DMD Stats 1.1.12 or later** ([stats.debitmydata.io](https://stats.debitmydata.io), or one of
+  your own): it publishes `blocks.json`, the blocks this site follows (`DMDM_STATS_URL`, below).
+- **A name in Cloudflare** (`mining.debitmydata.io` for DebitMyData's own), an A record to the
+  server's IP, **proxied** (orange cloud).
+- **A Cloudflare origin certificate** for that name: in Cloudflare, the domain, **SSL/TLS**,
+  **Origin Server**, **Create Certificate**. One certificate for `*.debitmydata.io` and
+  `debitmydata.io` covers every DebitMyData site.
 
 ## Install
 
-1. **The server.** Log in as root with your key, then turn off password logins:
+1. **The server.** Log in as root with the key, then turn off password logins:
 
    ```
    printf 'PasswordAuthentication no\nKbdInteractiveAuthentication no\nPermitRootLogin prohibit-password\n' > /etc/ssh/sshd_config.d/00-keys-only.conf
