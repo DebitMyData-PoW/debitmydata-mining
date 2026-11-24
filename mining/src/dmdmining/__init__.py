@@ -6,4 +6,4 @@ their history, sends the notifications each device chose, and writes the files o
 (mining.debitmydata.io), which are its API too.
 """
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"

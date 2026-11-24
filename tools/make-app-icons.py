@@ -8,7 +8,7 @@ The source folder is any DebitMyData app's icons (the pool's, or DMD Stats' web/
 badge is drawn again in red, with the glyph inside. Glyphs: flame (the default), trophy, globe,
 hammer. It writes the app icons (192, 512, 1024, the maskable ones for Android, the iPhone one),
 the notifications' badge (badge-96.png: the glyph alone, white), the top bar's badge
-(web/images/dmd-mining-25/50/75.png) and web/favicon.ico.
+(web/images/dmd-mining-25/50/75.png) and web/favicon.ico (the whole icon, for the browser's tab).
 """
 
 import subprocess
@@ -93,18 +93,15 @@ for name in ["icon-192.png", "icon-512.png", "icon-1024.png", "icon-maskable-512
 # The notifications' badge (Android's status bar): the glyph alone, white.
 glyph(96).save(OUT / "badge-96.png", optimize=True)
 
-# The top bar's brand: the badge alone (25, 50, 75 px), and the favicon.
-for size in (25, 50, 75, 32, 16):
+# The top bar's brand: the badge alone (25, 50, 75 px).
+for size in (25, 50, 75):
     S = 8
     im = Image.new("RGBA", (size * S, size * S), (0, 0, 0, 0))
     badge(im, size / 2, size / 2, size / 2 * 0.98 - 1 / S, S, 0.7)
-    small = im.resize((size, size), Image.LANCZOS)
-    if size in (25, 50, 75):
-        small.save(OUT.parent / f"dmd-mining-{size}.png", optimize=True)
-    else:
-        small.save(OUT / f"favicon-{size}.png")
-fav = [Image.open(OUT / f"favicon-{s}.png") for s in (16, 32)]
-fav[1].save(OUT.parent.parent / "favicon.ico", sizes=[(16, 16), (32, 32)])
-for s in (16, 32):
-    (OUT / f"favicon-{s}.png").unlink()
+    im.resize((size, size), Image.LANCZOS).save(OUT.parent / f"dmd-mining-{size}.png", optimize=True)
+
+# The favicon (the browser's tab): the whole icon, the coin with its badge, as the pool's.
+Image.open(OUT / "icon-512.png").convert("RGBA").save(
+    OUT.parent.parent / "favicon.ico", sizes=[(16, 16), (32, 32), (48, 48)]
+)
 print("ok:", GLYPH)
